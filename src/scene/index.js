@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+import { connect } from "react-redux";
 
 import Board from './components/Board'
 import RightSide from './RightSide'
 import { getRandomNumber } from './utils/random'
 import { FlexContainer, FlexItem, SimpleFlexItem } from './styles'
 
-const Scene = () => {
+const Scene = props => {
 	const [leftSide, addItemOnLeft] = useState([])
 
 	const getNewObject = () => {
@@ -39,7 +40,9 @@ const Scene = () => {
 
 	const getTorque = arr => arr.reduce((sum, { weight, position}) => sum + (weight*position), 0)
 
-	const leftTorque = getTorque(leftSide)
+  const leftTorque = getTorque(leftSide)
+  
+  const { rightTorque, rightWeight } = props
 
 	return (
 		<div>
@@ -50,6 +53,8 @@ const Scene = () => {
 				</SimpleFlexItem>
 				<SimpleFlexItem>
 					<h5>Right Side</h5>
+          <p>Total weight: {rightWeight}</p>
+          <p>Total Torque: {rightTorque}</p>
 				</SimpleFlexItem>
 			</FlexContainer>
 			<FlexContainer>
@@ -72,4 +77,11 @@ const Scene = () => {
 	)
 }
 
-export default Scene
+const mapStateToProps = ({ reducer }) => {
+	return {
+    rightTorque: reducer.rightTorque,
+    rightWeight: reducer.rightWeight
+	}
+}
+  
+export default connect(mapStateToProps)(Scene)

@@ -1,7 +1,9 @@
-import React, { useState, useEffect, Component } from 'react'
+import React, { Component } from 'react'
+import { connect } from "react-redux";
 
 import { getRandomNumber } from '../utils/random'
 import { FlexContainer, Square, EmptySquare, FlexCol } from './styles'
+import { SET_RIGHT_TORQUE, SET_RIGHT_WEIGHT } from '../../_store'
 
 class RightSide extends Component {
   constructor(props) {
@@ -42,12 +44,23 @@ class RightSide extends Component {
         ...this.state.objects,
         newObj
       ]
+    }, () => {
+      this.computeTorque()
     })
     const copy = JSON.parse(JSON.stringify(this.state.cols))
     copy[newObj.position - 1].push(newObj)
     this.setState({
       cols: copy
     })
+  }
+
+  computeTorque = () => {
+    const { objects } = this.state
+    const { setRightTorque, setRightWeight } = this.props
+    const totalTorque = objects.reduce((sum, { weight, position}) => sum + (weight*position), 0)
+    const totalWeight = objects.reduce((sum, { weight, position}) => sum + weight, 0)
+    setRightTorque(totalTorque)
+    setRightWeight(totalWeight)
   }
 
   getExpression = arr => {
@@ -88,4 +101,21 @@ class RightSide extends Component {
   }
 }
 
-export default RightSide
+const mapDispatchToProps = dispatch => {
+  return {
+    setRightTorque: data => dispatch({
+      type: SET_RIGHT_TORQUE,
+      data
+    }),
+    setRightWeight: data => dispatch({
+      type: SET_RIGHT_WEIGHT,
+      data
+    })
+  }
+}
+
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(RightSide)
