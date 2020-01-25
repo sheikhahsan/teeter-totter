@@ -5,6 +5,7 @@ export const FlexContainer = styled.div`
   width: 54rem;
   &.blocks-area {
     flex-grow: 1;
+    transform: rotate(${props => props.netTorque}deg);
   }
 `
 export const FlexItem = styled.div`

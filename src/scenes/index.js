@@ -46,7 +46,7 @@ const Scene = props => {
               <p>Total Torque: {rightTorque}</p>
             </SimpleFlexItem>
           </FlexContainer>
-          <FlexContainer className="blocks-area">
+          <FlexContainer className="blocks-area" netTorque={netTorque}>
             <FlexItem>
               <LeftSide />
             </FlexItem>
@@ -54,7 +54,7 @@ const Scene = props => {
               <RightSide />
             </FlexItem>
           </FlexContainer>
-          <Board />
+          <Board netTorque={netTorque}/>
         </>
         ) : null
       }
