@@ -21,6 +21,7 @@ export const FlexContainer = styled.div`
   display: flex;
   position: absolute;
   bottom: 0;
+  flex-direction: row-reverse;
 `
 
 export const FlexCol = styled.div`

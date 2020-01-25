@@ -29,8 +29,11 @@ class LeftSide extends Component {
   }
 
   getNewObject = () => {
-		const weight = getRandomNumber(10)
-		const position = getRandomNumber(5)
+    const { netTorque } = this.props
+    const weight = getRandomNumber(10)
+    const propsedPosition = Math.ceil(netTorque/weight)
+    const position = propsedPosition > 5 ? 5 : (propsedPosition <= 0 ? 1 : propsedPosition)
+    console.log(propsedPosition, position)
 		return {
 			weight,
 			position
@@ -87,6 +90,12 @@ class LeftSide extends Component {
   }
 }
 
+const mapStateToProps = ({ reducer }) => {
+	return {
+    netTorque: reducer.rightTorque - reducer.leftTorque
+	}
+}
+
 const mapDispatchToProps = dispatch => {
   return {
     setLeftTorque: data => dispatch({
@@ -100,8 +109,7 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(LeftSide)
