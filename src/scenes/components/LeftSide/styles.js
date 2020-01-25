@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Square = styled.div`
-  height: 3rem;
+  height: 5rem;
   width: 5rem;
   border: 1px solid;
   position: relative;

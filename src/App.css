@@ -21,6 +21,7 @@
   align-items: center;
   justify-content: center;
   color: white;
+  padding-bottom: 10px;
 }
 
 .App-link {
@@ -34,4 +35,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+button {
+  height: 36px;
 }

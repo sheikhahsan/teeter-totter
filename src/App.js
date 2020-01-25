@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import Scene from './scene'
+import Scene from './scenes'
 
 function App() {
   return (

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
 
-import { getRandomNumber } from '../utils/random'
+import { getRandomNumber } from '../../utils/random'
 import { FlexContainer, Square, EmptySquare, FlexCol } from './styles'
-import { SET_LEFT_TORQUE, SET_LEFT_WEIGHT } from '../../_store'
+import { SET_LEFT_TORQUE, SET_LEFT_WEIGHT, GAME_STATUS } from '../../../_store'
 
 class LeftSide extends Component {
   constructor(props) {
@@ -17,14 +17,35 @@ class LeftSide extends Component {
     } 
   }
 
-  componentDidMount() {
+  componentDidMount() { this.addInterval() }
+
+  componentWillUnmount() { this.removeInterval() }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.gameStatus !== this.props.gameStatus) {
+      if (this.props.gameStatus === GAME_STATUS.IN_PROGRESS) {
+        this.setState({
+          objects: [],
+          cols: [
+            [], [], [], [], []
+          ],
+          intervalId: null
+        })
+        this.addInterval()
+      } else {
+        this.removeInterval()
+      }
+    }
+  }
+
+  addInterval() {
     const intervalId = setInterval(() => this.addNewObject(), 2000)
     this.setState({
       intervalId
     })
   }
 
-  componentWillUnmount() {
+  removeInterval() {
     clearInterval(this.state.intervalId)
   }
 
@@ -92,6 +113,7 @@ class LeftSide extends Component {
 
 const mapStateToProps = ({ reducer }) => {
 	return {
+    gameStatus: reducer.gameStatus,
     netTorque: reducer.rightTorque - reducer.leftTorque
 	}
 }
