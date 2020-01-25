@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 import Board from './components/Board'
+import RightSide from './RightSide'
 import { getRandomNumber } from './utils/random'
 import { FlexContainer, FlexItem, SimpleFlexItem } from './styles'
 
 const Scene = () => {
-	const [rightSide, addItemOnRight] = useState([])
 	const [leftSide, addItemOnLeft] = useState([])
 
 	const getNewObject = () => {
@@ -25,14 +25,6 @@ const Scene = () => {
 		])
 	}
 
-	const onAddRight = () => {
-		const obj = getNewObject()
-		addItemOnRight([
-			...rightSide,
-			obj
-		])
-	}
-
 	const getExpression = arr => {
 		const expression = arr.map((obj, index) => (
 			<span key={index.toString()}>
@@ -48,7 +40,6 @@ const Scene = () => {
 	const getTorque = arr => arr.reduce((sum, { weight, position}) => sum + (weight*position), 0)
 
 	const leftTorque = getTorque(leftSide)
-	const rightTorque = getTorque(rightSide)
 
 	return (
 		<div>
@@ -68,21 +59,13 @@ const Scene = () => {
 					{leftTorque}
 				</FlexItem>
 				<FlexItem>
-					{getExpression(rightSide)}
-					<br /> =
-					{rightTorque}
+					<RightSide />
 				</FlexItem>
 			</FlexContainer>
 			<Board />
-			<div>
-				Net Torque: {leftTorque - rightTorque}
-			</div>
 			<FlexContainer>
 				<SimpleFlexItem>
 					<button type="button" onClick={onAddLeft}>Add on Left</button>
-				</SimpleFlexItem>
-				<SimpleFlexItem>
-					<button type="button" onClick={onAddRight}>Add on Right</button>
 				</SimpleFlexItem>
 			</FlexContainer>
 		</div>
