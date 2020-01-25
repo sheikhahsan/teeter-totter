@@ -3,9 +3,9 @@ import { connect } from "react-redux";
 
 import { getRandomNumber } from '../utils/random'
 import { FlexContainer, Square, EmptySquare, FlexCol } from './styles'
-import { SET_RIGHT_TORQUE, SET_RIGHT_WEIGHT } from '../../_store'
+import { SET_LEFT_TORQUE, SET_LEFT_WEIGHT } from '../../_store'
 
-class RightSide extends Component {
+class LeftSide extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -56,47 +56,45 @@ class RightSide extends Component {
 
   computeTorque = () => {
     const { objects } = this.state
-    const { setRightTorque, setRightWeight } = this.props
+    const { setLeftTorque, setLeftWeight } = this.props
     const totalTorque = objects.reduce((sum, { weight, position}) => sum + (weight*position), 0)
     const totalWeight = objects.reduce((sum, { weight, position}) => sum + weight, 0)
-    setRightTorque(totalTorque)
-    setRightWeight(totalWeight)
+    setLeftTorque(totalTorque)
+    setLeftWeight(totalWeight)
   }
 
   render() {
     return (
-      <div>
-        <FlexContainer>
-          {this.state.cols.map((col, index) => (
-            <FlexCol key={index.toString()}>
-              {
-                !col.length
-                  ? <EmptySquare />
-                  : col.map((obj, index2) => (
-                    <Square key={index2.toString()}>
-                      <span className="text">
-                        {obj.weight} kg<br/>
-                        {obj.position} m
-                      </span>
-                    </Square>
-                ))
-              }
-            </FlexCol>
-          ))}
-        </FlexContainer>
-      </div>
+      <FlexContainer>
+        {this.state.cols.map((col, index) => (
+          <FlexCol key={index.toString()}>
+            {
+              !col.length
+                ? <EmptySquare />
+                : col.map((obj, index2) => (
+                  <Square key={index2.toString()}>
+                    <span className="text">
+                      {obj.weight} kg<br/>
+                      {obj.position} m
+                    </span>
+                  </Square>
+              ))
+            }
+          </FlexCol>
+        ))}
+      </FlexContainer>
     )
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    setRightTorque: data => dispatch({
-      type: SET_RIGHT_TORQUE,
+    setLeftTorque: data => dispatch({
+      type: SET_LEFT_TORQUE,
       data
     }),
-    setRightWeight: data => dispatch({
-      type: SET_RIGHT_WEIGHT,
+    setLeftWeight: data => dispatch({
+      type: SET_LEFT_WEIGHT,
       data
     })
   }
@@ -106,4 +104,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   null,
   mapDispatchToProps
-)(RightSide)
+)(LeftSide)

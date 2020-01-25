@@ -3,65 +3,31 @@ import { connect } from "react-redux";
 
 import Board from './components/Board'
 import RightSide from './RightSide'
-import { getRandomNumber } from './utils/random'
-import { FlexContainer, FlexItem, SimpleFlexItem } from './styles'
+import LeftSide from './LeftSide'
+import { FlexContainer, FlexItem, SimpleFlexItem, FlexColContainer } from './styles'
 
-const Scene = props => {
-	const [leftSide, addItemOnLeft] = useState([])
-
-	const getNewObject = () => {
-		const weight = getRandomNumber(10)
-		const position = getRandomNumber(5)
-		return {
-			weight,
-			position
-		}
-	}
-
-	const onAddLeft = () => {
-		const obj = getNewObject()
-		addItemOnLeft([
-			...leftSide,
-			obj
-		])
-	}
-
-	const getExpression = arr => {
-		const expression = arr.map((obj, index) => (
-			<span key={index.toString()}>
-				<span>({obj.weight}kg x </span>
-				<span>{obj.position}m) + </span>
-			</span>
-		))
-		return (<span>
-			{expression}
-		</span>)
-	}
-
-	const getTorque = arr => arr.reduce((sum, { weight, position}) => sum + (weight*position), 0)
-
-  const leftTorque = getTorque(leftSide)
-  
-  const { rightTorque, rightWeight } = props
+const Scene = props => {  
+  const { rightTorque, rightWeight, leftWeight, leftTorque } = props
 
 	return (
-		<div>
-			<h5>Scene Component</h5>
+		<FlexColContainer>
+			<h5>Teeter Totter</h5>
+      <p>Net Toque: {rightTorque - leftTorque}</p>
 			<FlexContainer>
 				<SimpleFlexItem>
 					<h5>Left Side</h5>
+					<p>Total weight: {leftWeight}</p>
+					<p>Total Torque: {leftTorque}</p>
 				</SimpleFlexItem>
 				<SimpleFlexItem>
 					<h5>Right Side</h5>
-          <p>Total weight: {rightWeight}</p>
-          <p>Total Torque: {rightTorque}</p>
+					<p>Total weight: {rightWeight}</p>
+					<p>Total Torque: {rightTorque}</p>
 				</SimpleFlexItem>
 			</FlexContainer>
-			<FlexContainer>
+			<FlexContainer className="blocks-area">
 				<FlexItem>
-					{getExpression(leftSide)}
-					<br /> =
-					{leftTorque}
+					<LeftSide />
 				</FlexItem>
 				<FlexItem>
 					<RightSide />
@@ -69,18 +35,17 @@ const Scene = props => {
 			</FlexContainer>
 			<Board />
 			<FlexContainer>
-				<SimpleFlexItem>
-					<button type="button" onClick={onAddLeft}>Add on Left</button>
-				</SimpleFlexItem>
 			</FlexContainer>
-		</div>
+		</FlexColContainer>
 	)
 }
 
 const mapStateToProps = ({ reducer }) => {
 	return {
     rightTorque: reducer.rightTorque,
-    rightWeight: reducer.rightWeight
+    rightWeight: reducer.rightWeight,
+    leftTorque: reducer.leftTorque,
+    leftWeight: reducer.leftWeight
 	}
 }
   
